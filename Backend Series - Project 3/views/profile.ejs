@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Miniproject</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body>
+    <div class="min-h-screen bg-zinc-900 text-white p-10">
+
+        <div class="flex justify-end w-full">
+
+            <a href="/logout" class="bg-red-500 rounded-md px-3 py-2 mb-5 inline-block">Logout</a>
+        </div>
+
+        <div class="flex items-start gap-3 overflow-hidden">
+            <div class="w-10 h-10 rounded-md">
+                <a href="/profile/upload"><img class="w-full h-full object-cover" src="images/uploads/<%= user.profilepic %>" alt=""></a>
+                
+            </div>
+            <h3 class="text-3xl mb-7 ">Hello, <%=user.name %></h3>
+
+        </div>
+
+
+        <h4 class="mb-5">You can create a post</h4>
+
+        <form action="/post" method="post">
+            <textarea placeholder="Write something"
+                class="p-3 outline-none w-1/3 bg-transparent block rounded-md border-zinc-800 resize-none border-2"
+                name="content"></textarea>
+            <input type="submit" class="px-3 py-2 bg-blue-500 rounded-md block mt-5" value="Create">
+        </form>
+
+        <div class="mt-20 posts">
+            <h3 class="text-zinc-500 text-2xl mb-9">Your post</h3>
+            <div class="postcontainer mt-5 grid grid-cols-2 gap-8">
+               
+                <% user.posts.reverse().forEach(function(post) { %>
+                    <div class="post border-[1px] p-4 rounded-md bg-zinc-800 mb-4 border-zinc-700" data-id="<%= post._id %>">
+                        <h4 class="pb-4 text-blue-500">@<%= user.username %></h4>
+                        <p class="tracking-tight text-sm"><%= post.content %></p>
+                        <!-- <small class="mt-2 inline-block"><%= post.likes.length %> likes</small> -->
+                        <small id="like-count-<%= post._id %>"><%= post.likes.length %> likes</small>
+
+                        <div class="btns flex mt-1 gap-5 items-end">
+                            <a class="text-cyan-300 cursor-pointer" onclick="toggleLike('<%= post._id %>')" id="like-btn-<%= post._id %>">
+                                <%= post.likes.indexOf(user._id) === -1 ? "Like" : "Unlike" %>
+                            </a>
+                            
+                            <a class="text-cyan-300" href="/edit/<%= post._id %>">Edit</a>
+                            <button 
+                                type="button" 
+                                class="text-red-300 ml-auto" 
+                                onclick="deletePost('<%= post._id %>')">
+                                Delete
+                            </button>
+                        </div>
+                    </div>
+                    
+                    
+                <% }) %>
+                
+            </div>
+        </div>
+    </div>
+</body>
+
+<script>
+    // Handle Like Button Clicks
+    async function toggleLike(postId) {
+        try {
+            const response = await fetch(`/like/${postId}`, {
+                method: "GET", // or POST if you modify the route
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            });
+
+            if (response.ok) {
+                const data = await response.json(); // Get the updated like count and status
+                const likeBtn = document.getElementById(`like-btn-${postId}`);
+                const likeCount = document.getElementById(`like-count-${postId}`);
+
+                // Update the button text and like count dynamically
+                likeBtn.textContent = data.liked ? "Unlike" : "Like";
+                likeCount.textContent = `${data.likes} likes`;
+            } else {
+                alert("Failed to toggle like.");
+            }
+        } catch (error) {
+            console.error("Error toggling like:", error);
+        }
+    }
+
+    // Handle Delete Button Clicks
+    async function deletePost(postId) {
+        try {
+            const response = await fetch(`/delete/${postId}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            if (response.ok) {
+                // Remove the deleted post from the DOM
+                const postElement = document.querySelector(`.post[data-id="${postId}"]`);
+                if (postElement) {
+                    postElement.remove();
+                }
+            } else {
+                alert("Failed to delete the post.");
+            }
+        } catch (error) {
+            console.error("Error deleting post:", error);
+        }
+    }
+</script>
+
+
+</html>
