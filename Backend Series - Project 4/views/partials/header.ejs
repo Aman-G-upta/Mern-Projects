@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ecommerce store</title>
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="font-['helvetica_now_display']">
+    <% var loggedin=typeof loggedin !=="undefined" ? loggedin : true %>
+        <% if(loggedin){ %>
+            <nav
+                class="w-full flex justify-between px-10 py-5 fixed top-0 left-0 z-50 backdrop-blur-lg bg-white/70 shadow-md transition-all duration-300">
+                <h3 class="text-xl font-bold">Scatch</h3>
+
+                <div class="flex gap-5">
+                    <a href="/shop" class="hover:underline">Shop</a>
+                    <a href="/owners/admin" class="hover:underline">Admin Panel</a>
+                    <a href="/cart" class="hover:underline">Cart</a>
+                    <a href="/owners/profile" class="hover:underline">My Account</a>
+                    <a class="text-red-600 font-bold hover:underline" href="/users/logout">Logout</a>
+                </div>
+            </nav>
+        <% } %>
+
+                <!-- Content Below Navbar -->
+                <div class="mt-[80px]">
+                    <!-- Your page content here -->
+                </div>
+</body>
