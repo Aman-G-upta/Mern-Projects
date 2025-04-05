@@ -1,0 +1,21 @@
+/* Customize scrollbar width */
+::-webkit-scrollbar {
+    width: 12px; /* Adjust width */
+  }
+  
+  /* Track (background of the scrollbar) */
+  ::-webkit-scrollbar-track {
+    background: #f1f1f1; /* Light gray */
+  }
+  
+  /* Handle (the part you drag) */
+  ::-webkit-scrollbar-thumb {
+    background: #35b198; /* Change to your preferred color */
+    border-radius: 4px; /* Rounded edges */
+  }
+  
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: #1ee5bd; /* Darker shade on hover */
+  }
+  
